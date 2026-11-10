@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos ご提案 | 途絶えたプロジェクトの続きを、書く。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0B1220;
+    --bg-panel:#121B2E;
+    --bg-panel2:#172238;
+    --accent-amber:#E8963C;
+    --accent-teal:#46C9B0;
+    --text-light:#F4F1EA;
+    --text-muted:#8C98AC;
+    --line-dim:#273352;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-deep);
+    color:var(--text-light);
+    font-family:"Noto Sans JP", sans-serif;
+    line-height:1.8;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:"Space Grotesk","Noto Sans JP", sans-serif;
+    font-weight:700;
+    letter-spacing:0.02em;
+  }
+  .mono{
+    font-family:"JetBrains Mono", monospace;
+  }
+  a{color:inherit; text-decoration:none;}
+  .container{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- HEADER TAG ---------- */
+  .brand-tag{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 28px;
+    background:rgba(11,18,32,0.75);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-dim);
+  }
+  .brand-tag .logo{
+    font-family:"Space Grotesk", sans-serif;
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:0.08em;
+  }
+  .brand-tag .logo span{color:var(--accent-amber);}
+  .brand-tag .status{
+    font-family:"JetBrains Mono", monospace;
+    font-size:0.72rem;
+    color:var(--accent-teal);
+    border:1px solid var(--accent-teal);
+    padding:4px 10px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 0 80px;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(232,150,60,0.12), transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(70,201,176,0.10), transparent 50%),
+      var(--bg-deep);
+    overflow:hidden;
+  }
+  .commit-graph{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    max-width:560px;
+    margin-bottom:46px;
+  }
+  .commit-graph .dot{
+    width:11px; height:11px;
+    border-radius:2px;
+    background:var(--line-dim);
+  }
+  .commit-graph .dot.dead{ background:#333f5c; }
+  .commit-graph .dot.gap{ background:transparent; border:1px dashed #3a4568;}
+  .commit-graph .dot.revive{
+    background:var(--accent-amber);
+    box-shadow:0 0 10px rgba(232,150,60,0.6);
+  }
+  .commit-graph .dot.alive{
+    background:var(--accent-teal);
+    box-shadow:0 0 10px rgba(70,201,176,0.55);
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:0.82rem;
+    color:var(--accent-teal);
+    letter-spacing:0.12em;
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero .eyebrow::before{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--accent-amber);
+    box-shadow:0 0 8px var(--accent-amber);
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 5.6vw, 4rem);
+    line-height:1.35;
+    max-width:780px;
+    color:var(--text-light);
+  }
+  .hero h1 .hl{
+    color:var(--accent-amber);
+  }
+  .hero p.lead{
+    margin-top:28px;
+    max-width:600px;
+    color:var(--text-muted);
+    font-size:1.02rem;
+    font-weight:300;
+  }
+  .hero .from{
+    margin-top:46px;
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 22px;
+    border:1px solid var(--line-dim);
+    border-radius:8px;
+    background:rgba(23,34,56,0.6);
+    font-size:0.88rem;
+  }
+  .hero .from .big{
+    font-family:"Space Grotesk";
+    font-weight:700;
+    color:var(--accent-teal);
+    font-size:1rem;
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{
+    padding:100px 0;
+    position:relative;
+  }
+  .sec-head{
+    margin-bottom:56px;
+    max-width:680px;
+  }
+  .sec-head .tag{
+    font-family:"JetBrains Mono", monospace;
+    color:var(--accent-amber);
+    font-size:0.8rem;
+    letter-spacing:0.1em;
+    margin-bottom:14px;
+    display:block;
+  }
+  .sec-head h2{
+    font-size:clamp(1.6rem, 3.4vw, 2.3rem);
+    color:var(--text-light);
+    line-height:1.5;
+  }
+  .sec-head p{
+    color:var(--text-muted);
+    margin-top:18px;
+    font-size:0.98rem;
+  }
+
+  /* ---------- UNDERSTANDING ---------- */
+  .understand{
+    background:var(--bg-panel);
+    border-top:1px solid var(--line-dim);
+    border-bottom:1px solid var(--line-dim);
+  }
+  .understand-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  .understand-grid .quote-block{
+    border-left:3px solid var(--accent-amber);
+    padding-left:24px;
+  }
+  .understand-grid .quote-block p{
+    font-size:1.1rem;
+    color:var(--text-light);
+    font-weight:400;
+    line-height:1.95;
+  }
+  .status-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .status-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px;
+    background:var(--bg-panel2);
+    border-radius:8px;
+    border:1px solid var(--line-dim);
+    font-size:0.92rem;
+  }
+  .status-item .label{color:var(--text-muted);}
+  .status-item .val{
+    font-family:"JetBrains Mono", monospace;
+    font-size:0.82rem;
+  }
+  .val.ok{color:var(--accent-teal);}
+  .val.warn{color:var(--accent-amber);}
+
+  /* ---------- VALUE CARDS ---------- */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:22px;
+  }
+  .card{
+    background:var(--bg-panel2);
+    border:1px solid var(--line-dim);
+    border-radius:12px;
+    padding:30px 26px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  .card:hover{
+    transform:translateY(-5px);
+    border-color:var(--accent-teal);
+  }
+  .card .num{
+    font-family:"JetBrains Mono", monospace;
+    color:var(--accent-amber);
+    font-size:0.78rem;
+    display:block;
+    margin-bottom:18px;
+  }
+  .card h3{
+    font-size:1.08rem;
+    color:var(--text-light);
+    margin-bottom:12px;
+    line-height:1.5;
+  }
+  .card p{
+    color:var(--text-muted);
+    font-size:0.9rem;
+  }
+  .card::after{
+    content:"";
+    position:absolute;
+    right:-30px; bottom:-30px;
+    width:90px; height:90px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(70,201,176,0.12), transparent 70%);
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    background:var(--bg-panel);
+    border-top:1px solid var(--line-dim);
+    border-bottom:1px solid var(--line-dim);
+  }
+  .steps{
+    position:relative;
+    padding-left:26px;
+  }
+  .steps::before{
+    content:"";
+    position:absolute;
+    left:5px; top:6px; bottom:6px;
+    width:2px;
+    background:linear-gradient(to bottom, #3a4568 0%, var(--accent-amber) 45%, var(--accent-teal) 100%);
+  }
+  .step{
+    position:relative;
+    padding:0 0 46px 30px;
+  }
+  .step:last-child{padding-bottom:0;}
+  .step::before{
+    content:"";
+    position:absolute;
+    left:-26px; top:4px;
+    width:12px; height:12px;
+    border-radius:50%;
+    background:var(--bg-panel);
+    border:2px solid var(--accent-teal);
+  }
+  .step .ph{
+    font-family:"JetBrains Mono", monospace;
+    color:var(--accent-amber);
+    font-size:0.76rem;
+    letter-spacing:0.08em;
+    margin-bottom:8px;
+    display:block;
+  }
+  .step h4{
+    font-size:1.1rem;
+    color:var(--text-light);
+    margin-bottom:8px;
+  }
+  .step p{
+    color:var(--text-muted);
+    font-size:0.92rem;
+    max-width:560px;
+  }
+
+  /* ---------- CLOSING ---------- */
+  .closing{
+    text-align:center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(232,150,60,0.1), transparent 60%),
+      var(--bg-deep);
+  }
+  .closing h2{
+    font-size:clamp(1.7rem, 4vw, 2.6rem);
+    max-width:720px;
+    margin:0 auto 20px;
+    line-height:1.6;
+  }
+  .closing p{
+    color:var(--text-muted);
+    max-width:560px;
+    margin:0 auto 40px;
+  }
+  .cta-row{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 34px;
+    border-radius:8px;
+    font-family:"Space Grotesk", sans-serif;
+    font-weight:600;
+    font-size:0.98rem;
+    transition:all .25s ease;
+  }
+  .btn.primary{
+    background:var(--accent-amber);
+    color:#1b1306;
+  }
+  .btn.primary:hover{
+    background:#f3a95a;
+    transform:translateY(-2px);
+  }
+  .btn.ghost{
+    border:1px solid var(--line-dim);
+    color:var(--text-light);
+  }
+  .btn.ghost:hover{
+    border-color:var(--accent-teal);
+    color:var(--accent-teal);
+  }
+  footer{
+    text-align:center;
+    padding:36px 24px 50px;
+    color:var(--text-muted);
+    font-size:0.78rem;
+    font-family:"JetBrains Mono", monospace;
+    border-top:1px solid var(--line-dim);
+  }
+
+  @media (max-width:760px){
+    .understand-grid{grid-template-columns:1fr;}
+    section{padding:72px 0;}
+    .hero{padding-top:110px;}
+    .brand-tag{padding:14px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="brand-tag">
+  <div class="logo">KAIRO<span>S</span></div>
+  <div class="status mono">● proposal_mode: ON</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="commit-graph" aria-hidden="true">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="dot dead"></span><span class="dot dead"></span><span class="dot dead"></span>
+      <span class="dot gap"></span><span class="dot gap"></span><span class="dot gap"></span>
+      <span class="dot gap"></span><span class="dot gap"></span><span class="dot gap"></span>
+      <span class="dot gap"></span><span class="dot gap"></span><span class="dot gap"></span>
+      <span class="dot revive"></span><span class="dot alive"></span><span class="dot alive"></span>
+      <span class="dot alive"></span><span class="dot alive"></span><span class="dot alive"></span>
+      <span class="dot alive"></span><span class="dot alive"></span><span class="dot alive"></span>
+    </div>
+
+    <span class="eyebrow mono">KAIROS PROPOSAL — 開発引き継ぎのご提案</span>
+    <h1>途絶えたコミットの続きを、<br><span class="hl">私たちが書きます。</span></h1>
+    <p class="lead">
+      連絡が取れなくなった開発者、止まったままのリポジトリ、説明のないコード。
+      その続きから始める開発は、ゼロからの新規開発とはまったく違う技術が必要です。
+      Kairosは「途中からのプロジェクト」を読み解き、引き継ぎ、完成まで導くチームです。
+    </p>
+    <div class="from">
+      <span class="big mono">Kairos</span>
+      <span style="color:var(--text-muted)">Web制作・システム開発チームより、ウッディ11110様へ</span>
+    </div>
+  </div>
+</section>
+
+<!-- UNDERSTANDING -->
+<section class="understand">
+  <div class="container">
+    <div class="sec-head">
+      <span class="tag">01 / UNDERSTANDING</span>
+      <h2>今の状況を、私たちはこう理解しています。</h2>
+    </div>
+    <div class="understand-grid">
+      <div class="quote-block">
+        <p>
+          「ドメインもサーバーも用意した。GitHubに資料もある。
+          でも、肝心の開発者と連絡が取れなくなり、
+          何がどこまで出来ているのか分からないまま、時間だけが過ぎている。」
+        </p>
+      </div>
+      <div class="status-list">
+        <div class="status-item">
+          <span class="label">ドメイン</span>
+          <span class="val ok mono">保有済み ✓</span>
+        </div>
+        <div class="status-item">
+          <span class="label">サーバー</span>
+          <span class="val ok mono">契約済み ✓</span>
+        </div>
+        <div class="status-item">
+          <span class="label">GitHub / 資料</span>
+          <span class="val ok mono">あり ✓</span>
+        </div>
+        <div class="status-item">
+          <span class="label">開発環境・引き継ぎ情報</span>
+          <span class="val warn mono">不足 ⚠</span>
+        </div>
+        <div class="status-item">
+          <span class="label">前担当者との連絡</span>
+          <span class="val warn mono">途絶 ⚠</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <span class="tag">02 / WHAT KAIROS BRINGS</span>
+      <h2>Kairosが引き継ぎ案件で提供できる価値</h2>
+      <p>新規開発とは異なる「読む力」「推測する力」「壊さず進める力」を、プロセスとして持っています。</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="num mono">01</span>
+        <h3>既存コードの解読・棚卸し</h3>
+        <p>GitHubの履歴・コミットメッセージ・構成ファイルから、前任者の設計意図と未完了箇所を丁寧に再構築します。</p>
+      </div>
+      <div class="card">
+        <span class="num mono">02</span>
+        <h3>現状可視化レポートの提出</h3>
+        <p>「何が動いていて、何が足りないか」を言語化した報告書を最初に提示。手探りのまま契約を進めません。</p>
+      </div>
+      <div class="card">
+        <span class="num mono">03</span>
+        <h3>壊さない移行プロセス</h3>
+        <p>サーバー・ドメインなど既存資産を尊重し、ロールバック可能な手順で環境を再構築。巻き戻しのリスクを最小化します。</p>
+      </div>
+      <div class="card">
+        <span class="num mono">04</span>
+        <h3>工数ベースの柔軟な見積もり</h3>
+        <p>調査結果に応じて作業範囲と費用を分解提示。「とりあえず全部お任せ」ではない、納得感のある合意形成をします。</p>
+      </div>
+      <div class="card">
+        <span class="num mono">05</span>
+        <h3>公開後も続く伴走</h3>
+        <p>完成・公開がゴールではなく、運用・改善までを見据えた長期的な開発パートナーとして関わります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline">
+  <div class="container">
+    <div class="sec-head">
+      <span class="tag">03 / HOW WE PROCEED</span>
+      <h2>進め方 — 調査から公開まで</h2>
+      <p>最初から全てを決めず、確認しながら段階的に進めます。</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="ph">PHASE 0 ・ 1週間目安</span>
+        <h4>現状調査・ヒアリング</h4>
+        <p>GitHubリポジトリ、サーバー環境、既存資料を確認。足りない情報は貴社に直接ヒアリングします。</p>
+      </div>
+      <div class="step">
+        <span class="ph">PHASE 1 ・ 調査後すぐ</span>
+        <h4>現状レポート＆お見積もり</h4>
+        <p>何が完成していて、何が未着手かを明文化。必要工数と概算費用・納期をご相談します。</p>
+      </div>
+      <div class="step">
+        <span class="ph">PHASE 2</span>
+        <h4>開発環境の再構築</h4>
+        <p>ローカル・ステージング環境を再現し、前任者が残した構成を安全に動かせる状態にします。</p>
+      </div>
+      <div class="step">
+        <span class="ph">PHASE 3</span>
+        <h4>未完成部分の開発・修正</h4>
+        <p>合意した範囲に沿って実装を再開。進捗は定期的に共有し、ブラックボックス化させません。</p>
+      </div>
+      <div class="step">
+        <span class="ph">PHASE 4</span>
+        <h4>動作確認・公開</h4>
+        <p>本番環境での最終確認を経て公開。公開後の軽微な調整・運用相談にも対応します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="container">
+    <h2>止まっていた時間を、取り戻す一歩を。</h2>
+    <p>
+      まずは現状のGitHubと資料を拝見させてください。
+      無理な引き受け方はせず、実態に即した工数と進め方をご提案します。
+    </p>
+    <div class="cta-row">
+      <a href="#" class="btn primary">Kairosに相談する →</a>
+      <a href="#" class="btn ghost">実績・ポートフォリオを見る</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  KAIROS — Web制作・システム開発チーム ／ 本ページは「ウッディ11110」様向けの個別提案資料です。
+</footer>
+
+</body>
+</html>
